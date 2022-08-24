@@ -1,0 +1,113 @@
+api:
+  common:
+    version: 1.0.0
+    title: Demo Bank API
+    description: Description of the API...
+    termsOfServiceUrl: MINE TERMS OF SERVICE URL
+    license: License
+    licenseUrl: MY LICENSE URL
+
+    contact:
+      name: Contact
+      url: My
+      email: me@mail.com
+
+  composite:
+    create-user:
+      description: ID, PWD를 입력받아 User, Customer 등록
+      notes: |
+        # Normal Response
+        만약 id, pwd가 중복되지 않아 회원가입이 완료되었을 경우 Res 정보
+        1.200, 초기화면 이동
+
+        # Expected partial and error responses
+        1. 작성중
+
+spring:
+  # datasource:
+  #   driver-class-name: com.mysql.cj.jdbc.Driver
+  #   url: jdbc:mysql://localhost/demo
+  #   # url: jdbc:mysql://mysql-headless.mysql/demo
+  #   username: souress2
+  #   password: 1234
+  #   hikari:
+  #     maximum-pool-size: 10
+  #     connection-timeout: 5000
+  #     connection-init-sql: SELECT 1
+  #     validation-timeout: 2000
+  #     minimum-idle: 10
+  #     idle-timeout: 600000 
+  #     max-lifetime: 1800000
+  # jpa :
+  #   database: mysql
+  #   show-sql: true
+  #   hibernate.ddl-auto: update
+  #   properties.hibernate.format_sql: true
+
+  cloud.stream:
+    defaultBinder: rabbit
+    default.contentType: application/json
+    bindings:
+      output-users:
+        destination: users
+        producer:
+          required-groups: auditGroup
+      output-customers:
+        destination: customers
+        producer:
+          required-groups: auditGroup
+      output-accounts:
+        destination: accounts
+        producer:
+          required-groups: auditGroup
+          
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 7000
+  error.include-message: always
+
+app:
+  user-service:
+    host: localhost
+    port: 7001
+  customer-service:
+    host: localhost
+    port: 7002
+  account-service:
+    host: localhost
+    port: 7003
+
+logging:
+  level:
+    root: INFO
+    com.demo: DEBUG
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
+---
+spring.profiles: docker
+server.port: 8080
+# spring.datasource.url: jdbc:mysql://mysql-headless.mysql/demo
+
+app:
+  user-service:
+    host: user
+    port: 8080
+  customer-service:
+    host: customer
+    port: 8080
+  account-service:
+    host: account
+    port: 8080
+
+spring.rabbitmq:
+  host: rabbitmq-headless.rabbitmq
+  port: 5672
+  username: guest
+  password: guest

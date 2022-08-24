@@ -1,0 +1,59 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.3'
+	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+	id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+//	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	// Mapstruct
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+
+	// lombok
+	implementation 'org.projectlombok:lombok:1.18.18'
+	compileOnly 'org.projectlombok:lombok'
+
+	// lombok Mapstruct Binder
+	implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+	annotationProcessor(
+		'org.projectlombok:lombok', // lombok 1.18.16 이상은 이렇게 순서지정 안해도 된다.
+		'org.projectlombok:lombok-mapstruct-binding:0.2.0',
+		'org.mapstruct:mapstruct-processor:1.4.2.Final'
+	)
+
+	// compileOnly 'org.projectlombok:lombok'
+	// compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	runtimeOnly 'mysql:mysql-connector-java'
+	// annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+	// annotationProcessor 'org.projectlombok:lombok'
+	// annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
